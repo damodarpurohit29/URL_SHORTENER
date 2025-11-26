@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status, FastAPI
 
 
 
-from url_shortener.api import url_api
-from url_shortener.db.session import Base, engine
+from api import url_api
+from db.session import Base, engine
 
 Base.metadata.create_all(bind=engine)
 

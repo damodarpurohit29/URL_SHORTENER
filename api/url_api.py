@@ -4,10 +4,10 @@ from datetime import datetime, timedelta
 from typing import Optional
 from fastapi.responses import RedirectResponse
 
-from url_shortener.db.session import get_db
-from url_shortener.models.url_model import Url
-from url_shortener.schemas.url_schema import ShortenResponse, ShortenRequest, StatsResponse
-from url_shortener.utils import generate_short_code
+from db.session import get_db
+from models.url_model import Url
+from schemas.url_schema import ShortenResponse, ShortenRequest, StatsResponse
+from utils import generate_short_code
 
 router = APIRouter()
 
@@ -97,8 +97,11 @@ def get_url_stats(code: str, db: Session = Depends(get_db)):
     if url_entry.expires_at and url_entry.expires_at < datetime.utcnow():
         is_expired = True
 
+    short_url = f"http://localhost:8000/{url_entry.code}"  # Update host if running on a different port
+
     return StatsResponse(
         code=url_entry.code,
+        short_url=short_url,
         target_url=url_entry.target_url,
         visit_count=url_entry.visit_count,
         created_at=url_entry.created_at,
